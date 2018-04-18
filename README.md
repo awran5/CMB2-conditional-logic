@@ -4,7 +4,7 @@ I used to use [cmb2-conditionals](https://github.com/jcchavezs/cmb2-conditionals
 
 ## Installation
 - Include the `CMB2-conditional-logic.js` file in your project using [admin_enqueue_scripts](https://codex.wordpress.org/Plugin_API/Action_Reference/admin_enqueue_scripts)
-- Adding conditional fields is just like before, just add a new `attributes` parameter with `data-conditional-id` which should match the conditional feild ID and `data-conditional-value` which should match the conditional value
+- Adding conditional fields is just like before, just add a new `attributes` parameters: `data-conditional-id` which should match the conditional feild ID and `data-conditional-value` which should match the conditional value
 
 ```php
     $cmb_demo->add_field( array(
