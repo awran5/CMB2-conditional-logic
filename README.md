@@ -44,4 +44,5 @@ I used to use [cmb2-conditionals](https://github.com/jcchavezs/cmb2-conditionals
         ),
 ```
 
-If you like to use this plugin as a stand-alone plugin check my [conditionalScript](https://awran5.github.io/conditional-script/)
+
+#### If you like to use this plugin as a stand-alone plugin check my [conditionalScript](https://awran5.github.io/conditional-script/)
