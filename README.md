@@ -1,6 +1,6 @@
 # CMB2 conditional logic
 A small jQuery plugin for handling conditional logic fields for [CMB2](https://github.com/CMB2/CMB2).<br>
-I used to use [cmb2-conditionals](https://github.com/jcchavezs/cmb2-conditionals) pluing but since it doesn't work properly on Group fields and not updated for 2 years, I decided to create a new one. 
+I used to use [cmb2-conditionals](https://github.com/jcchavezs/cmb2-conditionals) pluing but since it doesn't work properly on Group fields and not updated for 2 years, I decided to create a new one. The plugin currently supports checkboxes, radios and select lists.
 
 ## Installation
 - If you like, you can use WordPress ready verion [here](https://github.com/awran5/WP-CMB2-conditional-logic/) or simply include the `CMB2-conditional-logic.js` file in your project using [admin_enqueue_scripts](https://codex.wordpress.org/Plugin_API/Action_Reference/admin_enqueue_scripts)
