@@ -7,87 +7,118 @@
  * 
  */
 
-(function( $ ) {
-    'use strict'
+(function ($) {
+  'use strict'
 
-    function CMB2Conditional() {
-        $('[data-conditional-id]').each( (i, el) => { 
-            let condName    = el.dataset.conditionalId,
-                condValue   = el.dataset.conditionalValue,
-                condParent  = el.closest('.cmb-row'),
-                inGroup     = condParent.classList.contains('cmb-repeat-group-field');
-                // Check if the field is in group
-                if( inGroup ) {
-                    let groupID  = condParent.closest('.cmb-repeatable-group').getAttribute('data-groupid'),
-                        iterator = condParent.closest('.cmb-repeatable-grouping').getAttribute('data-iterator');
-                    
-                    // change the select name with group ID added
-                    condName = `${groupID}[${iterator}][${condName}]`;
-                }
-                
-            // Check if value is matching
-            function valueMatch(value) {
-                return condValue.includes(value) && value !== '' ;
-            }
+  function CMB2Conditional() {
+    $('[data-conditional-id]').each((i, el) => {
+      let condName = el.dataset.conditionalId,
+        condValue = el.dataset.conditionalValue,
+        inverted = el.dataset.conditionalInvert,
+        condParent = el.closest('.cmb-row'),
+        inGroup = condParent.classList.contains('cmb-repeat-group-field');
 
-            // Select the field by name and loob through
-            $('[name="' + condName + '"]').each(function(i, field) {
-                // Select field
-                if( "select-one" === field.type ) {
-                    if( !valueMatch( field.value ) )
-                        $(condParent).hide();
+      // Check if the field is in group
+      if (inGroup) {
+        let groupID = condParent.closest('.cmb-repeatable-group').getAttribute('data-groupid'),
+          iterator = condParent.closest('.cmb-repeatable-grouping').getAttribute('data-iterator');
 
-                    // Check on change
-                    $(field).on('change', function(event) {
+        // change the select name with group ID added
+        condName = `${groupID}[${iterator}][${condName}]`;
+      }
 
-                       ( valueMatch( event.target.value ) ) ? $(condParent).show() : $(condParent).hide();
-                    
-                    });
-                }
-                
-                // Radio field
-                else if( "radio" === field.type ) {
+      // Check if value is matching
+      function valueMatch(value) {
+        return condValue.includes(value) && value !== '';
+      }
 
-                    // Hide the row if the value doesn't match and not checked
-                    if( !valueMatch( field.value ) && field.checked ) 
-                        $(condParent).hide();
+      let initAction = (inverted === false) ? 'hide' : 'show';
 
-                    // Check on change
-                    $(field).on('change', function(event) {
+      function conditionalField(field, action) {
 
-                        ( valueMatch( event.target.value ) ) ? $(condParent).show() : $(condParent).hide();
-                    
-                    });
-                }
+        if ((action == 'hide' && inverted === false) || (action != 'hide' && inverted !== false)) {
+          field.addClass('field_is_hidden');
+        } else {
+          field.removeClass('field_is_hidden');
+        }
 
-                // Checkbox field
-                else if( "checkbox" === field.type ) {    
+      }
 
-                    // Hide the row if the value doesn't match and not checked
-                    if( !field.checked ) 
-                        $(condParent).hide();
+      function isChecked(field) {
 
-                    // Check on change
-                    $(field).on('change', function(event) {
+        if ((!field.checked && inverted === false) || (field.checked && inverted !== false)) {
+          return false;
+        } else {
+          return true;
+        }
 
-                        ( event.target.checked ) ? $(condParent).show() : $(condParent).hide();
-                    
-                    });
-                }
-               
-            });
+      }
 
-        });
-    }
+      // Select the field by name and loob through
+      $('[name="' + condName + '"]').each(function (i, field) {
+        // Select field
+        if ("select-one" === field.type) {
 
-    // Trigger the funtion
-    CMB2Conditional();
+          if (!valueMatch(field.value)) {
+            conditionalField($(condParent), 'hide');
+          }
 
-    // Trigger again when new group added
-    $( '.cmb2-wrap > .cmb2-metabox' ).on( 'cmb2_add_row', function() {
+          // Check on change
+          $(field).on('change', function (event) {
 
-        CMB2Conditional();
+            (valueMatch(event.target.value)) ? conditionalField($(condParent), 'show') : conditionalField($(condParent), 'hide');
+
+          });
+
+        }
+
+        // Radio field
+        else if ("radio" === field.type) {
+
+          // Hide the row if the value doesn't match and not checked
+          if (!valueMatch(field.value) && isChecked(field)) {
+            conditionalField($(condParent), initAction);
+          }
+
+          // Check on change
+          $(field).on('change', function (event) {
+
+            (valueMatch(event.target.value)) ? conditionalField($(condParent), 'show') : conditionalField($(condParent), 'hide');
+
+          });
+
+        }
+
+        // Checkbox field
+        else if ("checkbox" === field.type) {
+
+          // Hide the row if the value doesn't match and not checked
+          if (!isChecked(field)) {
+            conditionalField($(condParent), initAction);
+          }
+
+          // Check on change
+          $(field).on('change', function (event) {
+
+            (event.target.checked) ? conditionalField($(condParent), 'show') : conditionalField($(condParent), 'hide');
+
+          });
+
+        }
+
+      });
 
     });
+  }
 
-})( jQuery );
+  // Trigger the funtion
+  CMB2Conditional();
+
+  // Trigger again when new group added
+  $('.cmb2-wrap > .cmb2-metabox').on('cmb2_add_row', function () {
+
+    CMB2Conditional();
+
+  });
+
+})(jQuery);
