@@ -1,7 +1,7 @@
 /**
  * Conditional logic for CMB2 library
  * @author    Awran5 <github.com/awran5>
- * @version   1.0.0
+ * @version   1.1.0
  * @license   under GPL v2.0 (https://github.com/awran5/CMB2-conditional-logic/blob/master/LICENSE)
  * @copyright © 2018 Awran5. All rights reserved.
  * 
