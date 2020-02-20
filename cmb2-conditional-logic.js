@@ -14,9 +14,11 @@
     $('[data-conditional-id]').each((i, el) => {
       let condName = el.dataset.conditionalId,
         condValue = el.dataset.conditionalValue,
-        inverted = el.dataset.conditionalInvert,
+        inverted = (el.dataset.conditionalInvert) ? true : false,
         condParent = el.closest('.cmb-row'),
         inGroup = condParent.classList.contains('cmb-repeat-group-field');
+
+      let initAction = (inverted === true) ? 'show' : 'hide';
 
       // Check if the field is in group
       if (inGroup) {
@@ -29,10 +31,17 @@
 
       // Check if value is matching
       function valueMatch(value) {
-        return condValue.includes(value) && value !== '';
-      }
 
-      let initAction = (inverted === false) ? 'hide' : 'show';
+        let checkCondition = condValue.includes(value) && value !== '';
+
+        // Invert if needed
+        if (inverted === true) {
+          checkCondition = !checkCondition;
+        }
+
+        return checkCondition;
+
+      }
 
       function conditionalField(field, action) {
 
@@ -44,7 +53,7 @@
 
       }
 
-      function isChecked(field) {
+      function checkboxInit(field) {
 
         if ((!field.checked && inverted === false) || (field.checked && inverted !== false)) {
           return false;
@@ -60,13 +69,13 @@
         if ("select-one" === field.type) {
 
           if (!valueMatch(field.value)) {
-            conditionalField($(condParent), 'hide');
+            conditionalField($(condParent), initAction);
           }
 
           // Check on change
           $(field).on('change', function (event) {
 
-            (valueMatch(event.target.value)) ? conditionalField($(condParent), 'show') : conditionalField($(condParent), 'hide');
+            (!valueMatch(event.target.value)) ? conditionalField($(condParent), 'show') : conditionalField($(condParent), 'hide');
 
           });
 
@@ -76,7 +85,7 @@
         else if ("radio" === field.type) {
 
           // Hide the row if the value doesn't match and not checked
-          if (!valueMatch(field.value) && isChecked(field)) {
+          if (!valueMatch(field.value) && checkboxInit(field)) {
             conditionalField($(condParent), initAction);
           }
 
@@ -93,7 +102,7 @@
         else if ("checkbox" === field.type) {
 
           // Hide the row if the value doesn't match and not checked
-          if (!isChecked(field)) {
+          if (!checkboxInit(field)) {
             conditionalField($(condParent), initAction);
           }
 
