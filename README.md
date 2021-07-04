@@ -9,6 +9,7 @@ I used to use [cmb2-conditionals](https://github.com/jcchavezs/cmb2-conditionals
 #### For adding conditional fields, add a new `attributes` parameter: 
 1. `data-conditional-id` which should match the conditional feild ID.
 2. `data-conditional-value` which should match the conditional value.
+3. `data-conditional-invert` use true to invert the behaviour
 
 ```php
     $cmb_demo->add_field( array(
@@ -36,6 +37,7 @@ I used to use [cmb2-conditionals](https://github.com/jcchavezs/cmb2-conditionals
         'attributes'    => array(
             'data-conditional-id'     => 'test_select_id',
             'data-conditional-value'  => 'two',
+            // 'data-conditional-invert' => true
         ),
     ) );
 ```
